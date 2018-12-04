@@ -8,7 +8,7 @@ pipeline {
                  }
                  stage('Two') {
                  steps {
-                    echo 'Proceed with stage2'
+                    echo 'Proceeding with stage2'
                  }
                  }
                  stage('Three') {
