@@ -6,40 +6,22 @@ pipeline {
                      echo 'Hello  User, Welcome to jenkins pipeline learning'
                  }
                  }
-                 stage('Two') {
+                 stage('Build') {
                  steps {
-                    echo 'Proceeding with stage2'
+                    echo 'Proceed with stage2'
+		    sh 'mvn clean install'
+		 }
+		 post {
+				success {
+					junit testResults: 'target/surefire-reports/**/*.xml', allowEmptyResults: true
+				}
+		}
                  }
-                 }
-                 stage('Three') {
-                 when {
-                       not {
-                            branch "master"
-                       }
-                 }
+                 stage('Docker Build') {
                  steps {
-                       echo "Hello"
+                       echo "Building image"
+			sh 'docker build . -t springdemo'
                  }
                  }
-                 stage('Four') {
-                 parallel { 
-                            stage('Unit Test') {
-                           steps {
-                                echo "Running the unit test..."
-                           }
-                           }
-                            stage('Integration test') {
-                              agent {
-                                    docker {
-                                            reuseNode true
-                                            image 'ubuntu'
-                                           }
-                                    }
-                              steps {
-                                echo "Running the integration test..."
-                              }
-                           }
-                           }
-                           }
-              }
+}
 }
